@@ -1,3 +1,6 @@
+Install your Python virtual environment:
+pip install virtualenv
+
 Set up your python virtual environment: 
 python -m venv .env
 
