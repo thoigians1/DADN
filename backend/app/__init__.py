@@ -7,6 +7,9 @@ from flask_sqlalchemy import SQLAlchemy
 # Import Login manager
 from flask_login import LoginManager
 
+# Import Flask_Migrate
+from flask_migrate import Migrate
+
 # Define the WSGI application object
 app = Flask(__name__)
 
@@ -19,6 +22,9 @@ db = SQLAlchemy(app)
 
 # Define Flask_login's Login Manager
 login_manager = LoginManager(app)
+
+# Define Flask_Migrate
+migrate = Migrate(app, db)
 
 # Homepage
 @app.route("/")
