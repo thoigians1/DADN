@@ -1,3 +1,4 @@
+from cmath import log
 from unicodedata import name
 from app import db
 from flask_sqlalchemy import SQLAlchemy
@@ -98,6 +99,23 @@ class WeeklyReport(Base):
     control_log = db.relationship('ControlLog', backref='weekly_report', lazy = True)
     buzzer_log = db.relationship('BuzzerLog', backref='weekly_report', lazy = True)
     
+    def get_room_logs(self):
+        return self.room_log
+
+    def get_buzzer_logs(self):
+        return self.buzzer_log
+
+    def get_control_logs(self):
+        return self.control_log
+
+    def get_all_logs(self):
+        logs = {}
+        logs.update({ "room_logs" : self.get_room_logs()})
+        logs.update({ "buzzer_logs" : self.get_buzzer_logs()})
+        logs.update({ "control_logs" : self.get_control_logs()})
+        return logs
+
+
 
 
 
