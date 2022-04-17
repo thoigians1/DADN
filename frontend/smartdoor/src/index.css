@@ -1,0 +1,115 @@
+body{
+  font-family: sans-serif;
+  background-color: rgb(220, 220, 220);
+}
+
+.container{
+  background-color: white;
+}
+
+.header{
+  padding-top: 5px;
+  text-align: center;
+  font-size: x-large;
+}
+
+.main{
+  display: flex;
+  height: 750px;
+  padding: 10px;
+}
+
+.data{
+  width: 70%;
+  border-radius: 30px;
+  border-color: rgb(54, 171, 239);
+  border-width: 5px;
+  border-style: solid;
+  padding: 20px 30px ;
+}
+
+.live_log{
+  margin-left: 20px;
+  background-color: white;
+  width: 30%;
+  border-radius: 30px;
+  border-color: rgb(54, 171, 239);
+  border-width: 5px;
+  border-style: solid;
+  padding: 20px;
+}
+
+.log_box{
+  font-size: x-large;
+}
+
+.logs{
+  padding-left: 20px;
+}
+
+.controlbtn{
+  border-top: solid rgb(54, 171, 239) 2px;
+  padding-top: 20px;
+}
+
+.btn_box{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.btn{
+    background-color: rgb(54, 171, 239);
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    /* display: inline-block; */
+    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    line-height: 20px;
+    list-style: none;
+    margin: 0;
+    outline: none;
+    padding: 10px 16px;
+    /* position: relative; */
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  font-weight: bold;
+
+}
+
+.new_log_noti{
+  color: red;
+  padding: 5px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.chart_box{
+  display: flex;
+  justify-content: center;
+  margin-top: 65px;
+}
+
+.value_box{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.value{
+  font-size: xx-large;
+  background-color: rgb(54, 171, 239);
+  border-radius: 30px;
+  padding: 0px 30px ;
+}
