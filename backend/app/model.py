@@ -41,7 +41,6 @@ class User(Base, UserMixin):
     name = db.Column(db.String(120), nullable=False)
     pw_hash = db.Column(db.String(80), nullable=False)
 
-    buzzer_log = db.relationship('BuzzerLog', backref='pushed_user', lazy = True )
     control_log = db.relationship('ControlLog', backref='user', lazy = True )
 
 
@@ -51,10 +50,11 @@ class RoomLog(Base):
 
     serialize_only = ["id", "time", "nop", "rpid"]
 
-    id = db.Column(db.Integer, primary_key = True, autoincrement=True)
+    id = db.Column(db.String(26), primary_key = True)
+
     time = db.Column(db.DateTime, nullable = False)
     nop = db.Column(db.Integer, nullable = False)
-    rpid = db.Column(db.Integer, db.ForeignKey('weekly_report.id'))
+    rpid = db.Column(db.Integer, db.ForeignKey('daily_report.id'))
 
     
 class ControlLog(Base):
@@ -65,18 +65,18 @@ class ControlLog(Base):
     id = db.Column(db.Integer, primary_key = True)
     time = db.Column(db.DateTime, nullable = False)
     command = db.Column(db.String(20), nullable = False)
+    door_id = db.Column(db.Integer, nullable = False)
     uid = db.Column(db.Integer, db.ForeignKey('user.id'))
-    rpid = db.Column(db.Integer, db.ForeignKey('weekly_report.id'))
+    rpid = db.Column(db.Integer, db.ForeignKey('daily_report.id'))
 
 class BuzzerLog(Base):
     __tablename__ = "buzzer_log"
 
     serialize_only = ["id", "time", "uid", ]
 
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.String(26), primary_key = True)
     time = db.Column(db.DateTime, nullable = False)
-    uid = db.Column(db.Integer, db.ForeignKey('user.id'))
-    rpid = db.Column(db.Integer, db.ForeignKey('weekly_report.id'))
+    rpid = db.Column(db.Integer, db.ForeignKey('daily_report.id'))
 
     def serialize(self):
         ser = super().serialize()
@@ -84,21 +84,20 @@ class BuzzerLog(Base):
         ser.update({'u_name' : name})
         return ser
 
-class WeeklyReport(Base):
-    __tablename__ = "weekly_report"
+class DailyReport(Base):
+    __tablenam__ = "daily_report"
 
-    serialize_only = ["id", "date_created", "average_nop", "max_nop", "n_alert"]
+    id = db.Column(db.Integer, primary_key = True)
+    created_at = db.Column(db.DateTime)
+    in_people = db.Column(db.Integer, nullable=True)
+    n_alert = db.Column(db.Integer, nullable=True)
 
-    id = db.Column(db.Integer, primary_key = True, autoincrement= True)
-    date_created = db.Column(db.DateTime, nullable = False)
-    average_nop = db.Column(db.Float)
-    max_nop = db.Column(db.Integer, nullable = True)
-    n_alert = db.Column(db.Integer, nullable = True)
+    week_id = db.Column(db.String, db.ForeignKey('weekly_report.id'))
 
-    room_log = db.relationship('RoomLog', backref='weekly_report', lazy = True)
-    control_log = db.relationship('ControlLog', backref='weekly_report', lazy = True)
-    buzzer_log = db.relationship('BuzzerLog', backref='weekly_report', lazy = True)
-    
+    room_log = db.relationship('RoomLog', backref='daily_report', lazy = True)
+    control_log = db.relationship('ControlLog', backref='daily_report', lazy = True)
+    buzzer_log = db.relationship('BuzzerLog', backref='daily_report', lazy = True)
+
     def get_room_logs(self):
         return self.room_log
 
@@ -114,6 +113,25 @@ class WeeklyReport(Base):
         logs.update({ "buzzer_logs" : self.get_buzzer_logs()})
         logs.update({ "control_logs" : self.get_control_logs()})
         return logs
+
+class WeeklyReport(Base):
+    # Monitor:
+    # Times buzzer triggered
+    # Total number of people went in the room in a week
+    # average number of people went in the room per day
+    __tablename__ = "weekly_report"
+
+    serialize_only = ["id", "date_created", "average_nop", "max_nop", "n_alert"]
+
+    id = db.Column(db.Integer, primary_key = True)
+    created_at = db.Column(db.DateTime, nullable=False)
+    # Average number of inpeople  in per day
+    average = db.Column(db.Float) 
+    total = db.Column(db.Integer, nullable = True)
+    n_alert = db.Column(db.Integer, nullable = True)
+
+    day_reports = db.relationship('DailyReport', backref='weekly_report', lazy=True)
+
 
 
 
