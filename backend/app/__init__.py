@@ -10,6 +10,8 @@ from flask_login import LoginManager
 # Import Flask_Migrate
 from flask_migrate import Migrate
 
+from flask_cors import CORS
+
 # Define the WSGI application object
 app = Flask(__name__)
 
@@ -25,6 +27,8 @@ login_manager = LoginManager(app)
 
 # Define Flask_Migrate
 migrate = Migrate(app, db)
+
+CORS(app)
 
 # Homepage
 @app.route("/")
