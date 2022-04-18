@@ -10,8 +10,11 @@ from flask_login import LoginManager
 # Import Flask_Migrate
 from flask_migrate import Migrate
 
+
 # Import Flask's restful Api
 from flask_restful import Api
+
+from flask_cors import CORS
 
 # Define the WSGI application object
 app = Flask(__name__)
@@ -30,6 +33,8 @@ login_manager = LoginManager(app)
 migrate = Migrate(app, db, render_as_batch=True)
 
 HEADER = {"X-AIO-Key" : "aio_Lwrn39sWCZsxUO5oi5AIwdBrHZa9"}
+
+CORS(app)
 
 # Homepage
 @app.route("/")
