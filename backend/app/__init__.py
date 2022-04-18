@@ -10,6 +10,9 @@ from flask_login import LoginManager
 # Import Flask_Migrate
 from flask_migrate import Migrate
 
+# Import Flask's restful Api
+from flask_restful import Api
+
 # Define the WSGI application object
 app = Flask(__name__)
 
@@ -24,7 +27,9 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 
 # Define Flask_Migrate
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, render_as_batch=True)
+
+HEADER = {"X-AIO-Key" : "aio_Lwrn39sWCZsxUO5oi5AIwdBrHZa9"}
 
 # Homepage
 @app.route("/")
@@ -42,8 +47,8 @@ from app.api import api
 from app.auth import auth
 
 # Register blueprint(s)
-app.register_blueprint(api)
 app.register_blueprint(auth)
+app.register_blueprint(api)
 
 
 # Build the database:
