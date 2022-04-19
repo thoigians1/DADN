@@ -22,13 +22,8 @@ rest_api.add_resource(RoomLogRecentAPI, '/room/log/recent')
 rest_api.add_resource(RoomLogAPI, '/room/log/<string:id>')
 rest_api.add_resource(BuzzerLogListAPI, '/buzzer/log')
 rest_api.add_resource(BuzzerLogAPI, '/buzzer/log/<int:id>')
+rest_api.add_resource(DeactivateBuzzerAPI, '/buzzer/off')
 rest_api.add_resource(AllWeeklyReportAPI, '/report/week')
 rest_api.add_resource(WeeklyReportAPI, '/report/week/<int:id>')
 rest_api.add_resource(AllDailyReportAPI, '/report/day')
 rest_api.add_resource(DailyReportAPI, '/report/day/<int:id>')
-
-
-
-
-
-
