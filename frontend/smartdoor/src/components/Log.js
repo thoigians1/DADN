@@ -3,7 +3,8 @@ const Log = ({logs, from_log, to_log, init_log, moveUp, moveDown, moveDownDisabl
     
 
     const getTime = (a) => {
-      return a.substring(a.length - 11, a.length - 3)
+        const pattern = new RegExp("[0-9]{2}\:[0-9]{2}\:[0-9]{2}")
+        return pattern.exec(a)
     }
 
   return (

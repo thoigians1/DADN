@@ -10,6 +10,7 @@ const Main = ({fetch_log}) => {
   const [headIdx, setHeadIdx] = useState(0)
   const [total_log, setTotalLog] = useState(0)
   const [current_pp, setCurrent_pp] = useState(0)
+  const [pp_per_hour, setPpPerHour] = useState([])
 
   useEffect(() => {
     const getLogs = async () => {
@@ -18,6 +19,7 @@ const Main = ({fetch_log}) => {
       setLogs(room_logs)
       setTotalLog(room_logs.length)
       setCurrent_pp(room_logs[room_logs.length - 1].nop)
+      setPpPerHour(getPpPerHour(room_logs))
       return room_logs
     }
     
@@ -28,8 +30,19 @@ const Main = ({fetch_log}) => {
     
   }, []);
 
+  const getPpPerHour = (roomLog) => {
+    var lst = Array(24).fill(0);
+    for (let i = 0; i < roomLog.length; i++){
+      const pattern = new RegExp("[0-9]{2}\:[0-9]{2}\:[0-9]{2}")
+      const time = pattern.exec(roomLog[i].time).toString()
+      const hour = parseInt(time.slice(0,2))
+      lst[hour] = roomLog[i].nop;
+    }
+    return lst
+  }
+
   const item_count = 9
-  const moveUpDisabled = (headIdx - item_count === 0)
+  const moveUpDisabled = (headIdx - item_count <= 0)
   const moveDownDisabled = ( headIdx >= total_log)
   const moveUp = () => {
     if (moveUpDisabled)
@@ -49,13 +62,14 @@ const Main = ({fetch_log}) => {
     setHeadIdx(room_logs.length)
     setTotalLog(room_logs.length)
     setCurrent_pp(room_logs[room_logs.length - 1].nop)
+    setPpPerHour(getPpPerHour(room_logs))
   }
   return (
     <div className='main'>
         <div className='data'>
           <Top current_pp={current_pp}/>
           <div className='chart_box'>
-            <MyChart/>
+            <MyChart pp_per_hour={pp_per_hour}/>
           </div>
         </div>
         <div className='live_log'>

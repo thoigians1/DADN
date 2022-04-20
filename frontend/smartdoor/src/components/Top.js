@@ -1,6 +1,9 @@
 import React from 'react'
 
 const Top = ({current_pp}) => {
+  const buzzerOff = async() => {
+    await fetch('http://127.0.0.1:8000/api/buzzer/off')
+  }
   return (
     <div className='row1'>
       <div className='value_box'>
@@ -13,7 +16,7 @@ const Top = ({current_pp}) => {
         
       </div>
       <div className='buzzer'>
-        <button className='button-19'>Buzzer</button>
+        <button className='button-19' onClick={() => buzzerOff()}>Buzzer</button>
       </div>
     </div>
   )
