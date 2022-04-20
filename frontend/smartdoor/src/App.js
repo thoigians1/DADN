@@ -9,19 +9,12 @@ function App() {
   var current_pp = 0;
   const [full, setFull] = useState(false);
 
-  useEffect(() => {
-    setInterval(() => {
-      if (current_pp >= max_pp){
-        current_pp -= 1
-        setFull(true);
-      }
-      else{
-        current_pp += 1
-        setFull(false);
-      }
-    }, 1000)
-  }, []);
-
+  const fetch_log = async() => {
+    const res = await fetch('http://127.0.0.1:8000/api/room/log')
+    const data = await res.json()
+    return data
+  }
+  
   function closeModal(){
     current_pp = 0;
     setFull(false);
@@ -30,7 +23,7 @@ function App() {
   return (
     <div className="container">
       <Header/>
-      <Main/>
+      <Main fetch_log={fetch_log}/>
       {/* {full ? 
         (<Alert closeModal={closeModal}/>)
       : null} */}

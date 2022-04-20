@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Top = () => {
+const Top = ({current_pp}) => {
   return (
     <div className='row1'>
       <div className='value_box'>
@@ -8,7 +8,7 @@ const Top = () => {
           Số người trong phòng: 
         </div>
         <div className='value'>
-          <h1>5/5</h1>
+          <h1>{current_pp}/5</h1>
         </div>
         
       </div>

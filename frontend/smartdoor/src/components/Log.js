@@ -1,56 +1,21 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
-const Log = () => {
-    const [logs, setLogs] = useState([
-        'log1',
-        'log2',
-        'log3',
-        'log4',
-        'log5',
-        'log6',
-        'log7',
-        'log8',
-        'log9',
-        'log10',
-        'log11',
-        'log12',
-        'log13',
-    ])
-    const fetch_log = () => {
-        setLogs((oldlogs) => [...oldlogs, 'logA'] )
-    }
+const Log = ({logs, from_log, to_log, init_log, moveUp, moveDown, moveDownDisabled}) => {
     
-    const total_log = logs.length
-    const item_count = 9
-    const [headIdx, setHeadIdx] = useState(total_log)
-    const moveUpDisabled = (headIdx - item_count === 0)
-    const moveDownDisabled = ( headIdx === total_log)
-    const moveUp = () => {
-        if (moveUpDisabled)
-          return;
-        setHeadIdx((curHead) => curHead-1)
-      }
-      const moveDown = () => {
-        if (moveDownDisabled)
-          return;
-        setHeadIdx((curHead) => curHead+1)
-      }
 
-    useEffect(() => {
-        setInterval(() => {
-            fetch_log();
-        }, 1000)
-    }, []);
+    const getTime = (a) => {
+      return a.substring(a.length - 11, a.length - 3)
+    }
 
   return (
     <div className='log_box'>
         <div className='logs'>
-            {logs.slice(headIdx - item_count,headIdx).map((log) => (
-                <h3>{log}</h3>
+            {logs.slice(from_log, to_log).map((log) => (
+                <h3 key={log.id}>{getTime(log.time)}: số người {log.nop}</h3>
             ))}
         </div>
         <div className='controlbtn'>
             <div className='btn_box'>
+                <button className='btn' onClick={() => init_log()}>To Newest</button>
                 <button className='btn' onClick={moveUp}>Up</button>
                 <button className='btn' onClick={moveDown}>Down</button>
             </div>
