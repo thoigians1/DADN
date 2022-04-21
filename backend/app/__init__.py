@@ -1,3 +1,4 @@
+import sys
 # Import flask
 from flask import Flask
 
@@ -20,8 +21,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 # Configurations
-app.config.from_object('config')
-
+app.config.from_object("config")
 # Define the database object which is imported
 # by modules and controllers
 db = SQLAlchemy(app)
@@ -32,7 +32,7 @@ login_manager = LoginManager(app)
 # Define Flask_Migrate
 migrate = Migrate(app, db, render_as_batch=True)
 
-HEADER = {"X-AIO-Key" : "aio_wVeM97Lanlj7kHdZKg7ILw4AIlA2"}
+HEADER = {"X-AIO-Key" : "aio_yAwb29538GaONNlzu2ZOXMKeQhmR"}
 
 CORS(app)
 
@@ -59,3 +59,7 @@ app.register_blueprint(api)
 # Build the database:
 # This will create the database file using SQLAlchemy
 db.create_all()
+
+
+
+

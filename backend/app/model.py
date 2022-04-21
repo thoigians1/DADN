@@ -48,9 +48,7 @@ class User(Base, UserMixin):
 class RoomLog(Base):
     __tablename__ = "room_log"
 
-    serialize_only = ["id", "time", "nop", "rpid"]
-
-    id = db.Column(db.String(26), primary_key = True)
+    id = db.Column(db.Integer, primary_key = True, autoincrement=True)
 
     time = db.Column(db.DateTime, nullable = False)
     nop = db.Column(db.Integer, nullable = False)
@@ -74,7 +72,7 @@ class BuzzerLog(Base):
 
     serialize_only = ["id", "time", "uid", ]
 
-    id = db.Column(db.String(26), primary_key = True)
+    id = db.Column(db.Integer, primary_key = True, autoincrement=True)
     time = db.Column(db.DateTime, nullable = False)
     rpid = db.Column(db.Integer, db.ForeignKey('daily_report.id'))
 

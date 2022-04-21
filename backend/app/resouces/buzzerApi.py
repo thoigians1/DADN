@@ -4,6 +4,7 @@ from datetime import datetime
 
 from sqlalchemy import values
 from app import db, HEADER
+from app.resouces.dailyReportApi import AllDailyReportAPI
 from ..model import BuzzerLog, DailyReport, WeeklyReport
 from ..utils.function import abort_if_exist, abort_if_not_exist, date2int
 import requests
@@ -25,18 +26,17 @@ class BuzzerLogListAPI(Resource):
         today = datetime.today()
         rp_id = date2int(today.date())
 
-        if DailyReport.query.get(rp_id) : 
+        if not DailyReport.query.get(rp_id):
+            AllDailyReportAPI().post()
 
-            log = BuzzerLog(
-                time=datetime.now(),
-                rpid=rp_id
-            )
+        log = BuzzerLog(
+            time=datetime.now(),
+            rpid=rp_id
+        )
 
-            db.session.add(log)
-            db.session.commit()
-            return marshal(log, buzzer_fields)
-
-        abort(409, message="Today report has not been created.")
+        db.session.add(log)
+        db.session.commit()
+        return marshal(log, buzzer_fields)
         
 
 class BuzzerLogAPI(Resource):
@@ -53,4 +53,12 @@ class DeactivateBuzzerAPI(Resource):
     def get(self):
         resp = requests.post(BASE,{'value' : 5}, headers=HEADER)
         return {'code' : 0 if resp.ok else 1}
+
+class CurrentBuzzerLogAPI(Resource):
+    def get(self):
+        resp = requests.get(BASE + "/retain", headers=HEADER)
+        resp = resp.text[:-1].split(",")
+        return {"status" : 0 if resp[0] == "5" else 1}
+            
+
         

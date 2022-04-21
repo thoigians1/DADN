@@ -1,9 +1,8 @@
-from calendar import week
-from dataclasses import field
-from flask import request
+from flask import request, redirect, url_for
 from flask_restful import Resource, reqparse, fields, marshal, abort
 from datetime import datetime
 from app import db
+from app.resouces.weeklyReportApi import AllWeeklyReportAPI
 from ..model import DailyReport, WeeklyReport
 from ..utils.function import abort_if_not_exist
 
@@ -22,26 +21,29 @@ class AllDailyReportAPI(Resource):
 
     def post(self):
         today = datetime.today()
-        week_rp = WeeklyReport.query.order_by(WeeklyReport.id.desc()).first()
-        if not week_rp or (today - week_rp.created_at).days > 7:
-            return {'message' : 'Can not find appopriate week report.'}
 
         date = str(today.date()).replace("-","")
         id = int( date + str(today.weekday()) )
         if DailyReport.query.get(id):
-            abort(409, message="A report for today has already been created")
-
+            abort(409, message="A daily report has already been created.")
+        
+        week_rp = WeeklyReport.query.order_by(WeeklyReport.id.desc()).first()
+        if not week_rp or (today - week_rp.created_at).days > 7:
+            week_rp = AllWeeklyReportAPI().post()[0]
+        else:
+            week_rp = marshal(week_rp, report_fields)
+        
         rp = DailyReport(
             id=id,
             created_at=today,
             in_people=0,
             n_alert=0,
-            week_id=week_rp.id
+            week_id=week_rp["id"]
         )
 
         db.session.add(rp)
         db.session.commit()
-
+        
         return marshal(rp, report_fields), 201
 
 class DailyReportAPI(Resource):
@@ -53,3 +55,17 @@ class DailyReportAPI(Resource):
         abort_if_not_exist(DailyReport, id)
         DailyReport.delete(id)
         return {}
+
+class CurrentDateReport(Resource):
+    def get(self):
+        today = datetime.today()
+
+        date = str(today.date()).replace("-","")
+        id = int( date + str(today.weekday()) )
+        rp = DailyReport.query.get(id)
+        if not rp:
+            rp = AllDailyReportAPI().post()
+
+        return marshal(rp, report_fields)
+            
+

@@ -17,13 +17,20 @@ rest_api = Api(api)
 
 rest_api.add_resource(UserListAPI, '/user')
 rest_api.add_resource(UserAPI, '/user/<int:id>')
+
 rest_api.add_resource(RoomLogListAPI, '/room/log')
 rest_api.add_resource(RoomLogRecentAPI, '/room/log/recent')
 rest_api.add_resource(RoomLogAPI, '/room/log/<string:id>')
+
 rest_api.add_resource(BuzzerLogListAPI, '/buzzer/log')
 rest_api.add_resource(BuzzerLogAPI, '/buzzer/log/<int:id>')
 rest_api.add_resource(DeactivateBuzzerAPI, '/buzzer/off')
+rest_api.add_resource(CurrentBuzzerLogAPI, '/buzzer/status')
+
 rest_api.add_resource(AllWeeklyReportAPI, '/report/week')
+rest_api.add_resource(CurrentWeekReportAPI, '/report/week/current')
 rest_api.add_resource(WeeklyReportAPI, '/report/week/<int:id>')
+
 rest_api.add_resource(AllDailyReportAPI, '/report/day')
+rest_api.add_resource(CurrentDateReport, '/report/day/current')
 rest_api.add_resource(DailyReportAPI, '/report/day/<int:id>')

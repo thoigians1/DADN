@@ -35,7 +35,7 @@ class AllWeeklyReportAPI(Resource):
         db.session.add(rp)
         db.session.commit()
         return marshal(rp, report_fields),201
-
+        
 class WeeklyReportAPI(Resource):
     def get(self, id):
         rp = WeeklyReport.get_by_id(id)
@@ -46,4 +46,16 @@ class WeeklyReportAPI(Resource):
         WeeklyReport.delete(id)
         return {}
 
+class CurrentWeekReportAPI(Resource):
+    # Get current week report. If has not been created or expired, create a new one
+    def get(self):
+        today = datetime.today()
+        recent_rp = WeeklyReport.query.order_by(WeeklyReport.id.desc()).first()
 
+        if not recent_rp or (today - recent_rp.created_at).days > 7:
+            recent_rp = self.post()
+
+        return marshal(recent_rp, report_fields)
+
+
+    
