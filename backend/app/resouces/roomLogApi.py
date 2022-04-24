@@ -1,11 +1,10 @@
-import json
-from flask import request, redirect
-from flask_restful import Resource, abort, reqparse, fields, marshal, url_for
+from flask import request
+from flask_restful import Resource, abort, fields, marshal
 from datetime import datetime
 from app import db, HEADER
-from app.resouces.dailyReportApi import AllDailyReportAPI
-from ..model import DailyReport, RoomLog, WeeklyReport
-from ..utils.function import abort_if_exist, abort_if_not_exist, date2int
+from ..model import DailyReport, RoomLog
+from ..controller import DailyReportController
+from ..utils.function import abort_if_not_exist, date2int
 import requests
 
 BASE = r"https://io.adafruit.com/api/v2/duongthanhthuong/feeds/people/data"
@@ -29,14 +28,13 @@ class RoomLogListAPI(Resource):
         return { 'room_logs' : list(map(lambda log : marshal(log,roomlog_fields), logs))}
 
     def post(self):
-        # nop = request.args.get('nop')
         nop = request.args.get('nop')
         if nop:
             today = datetime.today()
             rp_id = date2int(today.date())
             
             if not DailyReport.query.get(rp_id) : 
-                AllDailyReportAPI().post()
+                DailyReportController.createDailyReport()
 
             log = RoomLog(
                 time=datetime.now(),

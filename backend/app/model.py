@@ -52,7 +52,7 @@ class RoomLog(Base):
 
     time = db.Column(db.DateTime, nullable = False)
     nop = db.Column(db.Integer, nullable = False)
-    rpid = db.Column(db.Integer, db.ForeignKey('daily_report.id'))
+    rpid = db.Column(db.Integer, db.ForeignKey('daily_report_content.id'))
 
     
 class ControlLog(Base):
@@ -74,46 +74,54 @@ class BuzzerLog(Base):
 
     id = db.Column(db.Integer, primary_key = True, autoincrement=True)
     time = db.Column(db.DateTime, nullable = False)
-    rpid = db.Column(db.Integer, db.ForeignKey('daily_report.id'))
+    rpid = db.Column(db.Integer, db.ForeignKey('daily_report_content.id'))
 
-    def serialize(self):
-        ser = super().serialize()
-        name = User.get_by_id(self.uid).name
-        ser.update({'u_name' : name})
-        return ser
+    # def serialize(self):
+    #     ser = super().serialize()
+    #     name = User.get_by_id(self.uid).name
+    #     ser.update({'u_name' : name})
+    #     return ser
 
 class DailyReport(Base):
-    __tablenam__ = "daily_report"
-
+    __tablename__ = "daily_report"
     id = db.Column(db.Integer, primary_key = True)
     created_at = db.Column(db.DateTime)
+
+    content = db.relationship('DailyReportContent', backref='cover', lazy = True, uselist=False)
+    week_id = db.Column(db.String, db.ForeignKey('weekly_report.id'))
+
+class DailyReportContent(Base):
+    __tablename__ = "daily_report_content"
+
+    id = db.Column(db.Integer, primary_key = True)
     avg_nop = db.Column(db.Integer, nullable=True)
     n_alert = db.Column(db.Integer, nullable=True)
 
-    week_id = db.Column(db.String, db.ForeignKey('weekly_report.id'))
-
+    cover_id = db.Column(db.Integer, db.ForeignKey('daily_report.id'))
     room_log = db.relationship('RoomLog', backref='daily_report', lazy = True)
-    control_log = db.relationship('ControlLog', backref='daily_report', lazy = True)
     buzzer_log = db.relationship('BuzzerLog', backref='daily_report', lazy = True)
 
-
 class WeeklyReport(Base):
+    __tablename__ = "weekly_report"
+
+    id = db.Column(db.Integer, primary_key = True)
+    created_at = db.Column(db.DateTime, nullable=False)
+    content = db.relationship('WeeklyReportContent', backref='cover', lazy = True, uselist=False)
+
+    day_reports = db.relationship('DailyReport', backref='weekly_report', lazy=True)
+
+class WeeklyReportContent(Base):
     # Monitor:
     # Times buzzer triggered
     # Total number of people went in the room in a week
     # average number of people went in the room per day
-    __tablename__ = "weekly_report"
+    __tablename__ = "weekly_report_content"
 
-    serialize_only = ["id", "date_created", "average_nop", "max_nop", "n_alert"]
 
     id = db.Column(db.Integer, primary_key = True)
-    created_at = db.Column(db.DateTime, nullable=False)
-    # Average number of inpeople  in per day
     avg_nop = db.Column(db.Float) 
     n_alert = db.Column(db.Integer, nullable = True)
-
-    day_reports = db.relationship('DailyReport', backref='weekly_report', lazy=True)
-
+    cover_id = db.Column(db.Integer, db.ForeignKey('weekly_report.id'))
 
 
 
