@@ -87,7 +87,7 @@ class DailyReport(Base):
 
     id = db.Column(db.Integer, primary_key = True)
     created_at = db.Column(db.DateTime)
-    in_people = db.Column(db.Integer, nullable=True)
+    avg_nop = db.Column(db.Integer, nullable=True)
     n_alert = db.Column(db.Integer, nullable=True)
 
     week_id = db.Column(db.String, db.ForeignKey('weekly_report.id'))
@@ -96,21 +96,6 @@ class DailyReport(Base):
     control_log = db.relationship('ControlLog', backref='daily_report', lazy = True)
     buzzer_log = db.relationship('BuzzerLog', backref='daily_report', lazy = True)
 
-    def get_room_logs(self):
-        return self.room_log
-
-    def get_buzzer_logs(self):
-        return self.buzzer_log
-
-    def get_control_logs(self):
-        return self.control_log
-
-    def get_all_logs(self):
-        logs = {}
-        logs.update({ "room_logs" : self.get_room_logs()})
-        logs.update({ "buzzer_logs" : self.get_buzzer_logs()})
-        logs.update({ "control_logs" : self.get_control_logs()})
-        return logs
 
 class WeeklyReport(Base):
     # Monitor:
@@ -124,8 +109,7 @@ class WeeklyReport(Base):
     id = db.Column(db.Integer, primary_key = True)
     created_at = db.Column(db.DateTime, nullable=False)
     # Average number of inpeople  in per day
-    average = db.Column(db.Float) 
-    total = db.Column(db.Integer, nullable = True)
+    avg_nop = db.Column(db.Float) 
     n_alert = db.Column(db.Integer, nullable = True)
 
     day_reports = db.relationship('DailyReport', backref='weekly_report', lazy=True)

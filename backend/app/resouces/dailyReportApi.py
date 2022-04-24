@@ -1,18 +1,20 @@
+from functools import reduce
 from flask import request, redirect, url_for
-from flask_restful import Resource, reqparse, fields, marshal, abort
+from flask_restful import Resource, fields, marshal, abort
 from datetime import datetime
 from app import db
 from app.resouces.weeklyReportApi import AllWeeklyReportAPI
 from ..model import DailyReport, WeeklyReport
-from ..utils.function import abort_if_not_exist
+from ..utils.function import abort_if_not_exist, generateDailyReport
 
 report_fields = {
     'id' : fields.Integer,
     'created_at' : fields.DateTime,
-    'in_people' : fields.Integer,
+    'avg_nop' : fields.Float,
     'n_alert' : fields.Integer,
 }
 
+alert_log_fields = {'time' : fields.DateTime}
 class AllDailyReportAPI(Resource):
     def get(self):
         rps = DailyReport.get_all()
@@ -58,14 +60,33 @@ class DailyReportAPI(Resource):
 
 class CurrentDateReport(Resource):
     def get(self):
-        today = datetime.today()
-
-        date = str(today.date()).replace("-","")
-        id = int( date + str(today.weekday()) )
-        rp = DailyReport.query.get(id)
-        if not rp:
-            rp = AllDailyReportAPI().post()
-
+        rp = getCurrentDailyReport()
         return marshal(rp, report_fields)
+
+
+class GenerateDailyReportAPI(Resource):
+    def get(self, id):
+        print(id)
+        abort_if_not_exist(DailyReport,id)
+        rp = DailyReport.get_by_id(id)
+        generateDailyReport(rp)
+        alert_logs = list(map( lambda l : marshal(l,alert_log_fields), rp.buzzer_log))
+        db.session.commit()
+        ret = marshal(rp, report_fields)
+        ret.update({"alert_log" : alert_logs})
+        return ret
+
+
+def getCurrentDailyReport():
+    today = datetime.today()
+
+    date = str(today.date()).replace("-","")
+    id = int( date + str(today.weekday()) )
+    rp = DailyReport.query.get(id)
+    if not rp:
+        return AllDailyReportAPI().post()
+    
+    return rp
+    
             
 
