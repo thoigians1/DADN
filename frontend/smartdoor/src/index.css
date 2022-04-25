@@ -25,7 +25,7 @@ body{
   border-color: rgb(54, 171, 239);
   border-width: 5px;
   border-style: solid;
-  padding: 20px 30px ;
+  padding: 20px 40px ;
 }
 
 .live_log{
@@ -102,7 +102,7 @@ body{
 }
 
 .value_box{
-  width: 70%;
+  /* width: auto; */
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
@@ -116,24 +116,66 @@ body{
 }
 
 .row1{
+  width: 100%;
+  padding-left: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.buzzer-box{
+  width: 30%;
   display: flex;
   justify-content: flex-end;
 }
 
 .buzzer{
+  width: 50%;
   align-self: flex-start;
-  justify-self: flex-end;
 }
 
 /* CSS */
-.button-19 {
+
+.button-off {
   appearance: button;
-  background-color: #1899D6;
+  background-color: gray;
   border: solid transparent;
   border-radius: 16px;
   border-width: 0 0 4px;
   box-sizing: border-box;
-  color: #FFFFFF;
+  color: black;
+  /* font-weight: bold; */
+  cursor: pointer;
+  display: inline-block;
+  font-family: din-round,sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  line-height: 20px;
+  margin: 0;
+  outline: none;
+  overflow: visible;
+  padding: 13px 16px;
+  text-align: center;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.button-19 {
+  appearance: button;
+  background-color: #1CB0F6;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: black;
+  /* font-weight: bold; */
   cursor: pointer;
   display: inline-block;
   font-family: din-round,sans-serif;

@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
 
 const Main = ({fetch_log}) => {
   const [logs, setLogs] = useState([])
-  const [headIdx, setHeadIdx] = useState(0)
+  // const [headIdx, setHeadIdx] = useState(0)
   const [total_log, setTotalLog] = useState(0)
   const [current_pp, setCurrent_pp] = useState(0)
   const [pp_per_hour, setPpPerHour] = useState([])
@@ -41,29 +41,29 @@ const Main = ({fetch_log}) => {
     return lst
   }
 
-  const item_count = 9
-  const moveUpDisabled = (headIdx - item_count <= 0)
-  const moveDownDisabled = ( headIdx >= total_log)
-  const moveUp = () => {
-    if (moveUpDisabled)
-      return;
-    setHeadIdx((curHead) => curHead-1)
-  }
-  const moveDown = () => {
-    if (moveDownDisabled)
-      return;
-    setHeadIdx((curHead) => curHead+1)
-  }
+  // const item_count = 9
+  // const moveUpDisabled = (headIdx - item_count <= 0)
+  // const moveDownDisabled = ( headIdx >= total_log)
+  // const moveUp = () => {
+  //   if (moveUpDisabled)
+  //     return;
+  //   setHeadIdx((curHead) => curHead-1)
+  // }
+  // const moveDown = () => {
+  //   if (moveDownDisabled)
+  //     return;
+  //   setHeadIdx((curHead) => curHead+1)
+  // }
 
-  const init_log = async() =>{
-    const logFromServer = await fetch_log()
-    const room_logs = logFromServer.room_logs
-    setLogs(room_logs)
-    setHeadIdx(room_logs.length)
-    setTotalLog(room_logs.length)
-    setCurrent_pp(room_logs[room_logs.length - 1].nop)
-    setPpPerHour(getPpPerHour(room_logs))
-  }
+  // const init_log = async() =>{
+  //   const logFromServer = await fetch_log()
+  //   const room_logs = logFromServer.room_logs
+  //   setLogs(room_logs)
+  //   setHeadIdx(room_logs.length)
+  //   setTotalLog(room_logs.length)
+  //   setCurrent_pp(room_logs[room_logs.length - 1].nop)
+  //   setPpPerHour(getPpPerHour(room_logs))
+  // }
   return (
     <div className='main'>
         <div className='data'>
@@ -73,7 +73,15 @@ const Main = ({fetch_log}) => {
           </div>
         </div>
         <div className='live_log'>
-          <Log logs={logs} from_log={headIdx - item_count} to_log={headIdx} init_log={init_log} moveUp={moveUp} moveDown={moveDown} moveDownDisabled={moveDownDisabled}/>
+          <Log 
+            logs={logs} 
+            // from_log={headIdx - item_count} 
+            // to_log={headIdx} 
+            // init_log={init_log} 
+            // moveUp={moveUp} 
+            // moveDown={moveDown} 
+            // moveDownDisabled={moveDownDisabled}
+          />
         </div>
     </div>
   )
