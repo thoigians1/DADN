@@ -70,24 +70,6 @@ class WeeklyReportAPI(Resource):
         WeeklyReport.delete(id)
         return {}
 
-# class CurrentWeekReportAPI(Resource):
-#     # Get current week report. If has not been created or expired, create a new one
-#     def get(self):
-#         recent_rp = getCurrentWeeklyReport()
-
-#         return marshal(recent_rp, report_fields)
-
-
-
-# Helper Function
-def getCurrentWeeklyReport():
-    today = datetime.today()
-    recent_rp = WeeklyReport.query.order_by(WeeklyReport.id.desc()).first()
-
-    if not recent_rp or (today - recent_rp.created_at).days > 7:
-        recent_rp = AllWeeklyReportAPI().post()
-
-    return recent_rp
 
 
     
