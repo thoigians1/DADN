@@ -19,12 +19,11 @@ roomlog_fields = {
 
 class RoomLogListAPI(Resource):
     def get(self):
+        logs = RoomLog.get_all()
         n = request.args.get('n')
-        if not n:
-            n = 9
-        else:
-            n = int(n)
-        logs = RoomLog.query.order_by(RoomLog.id.desc()).limit(n)
+        if n:
+            logs = logs[:3]
+        
         return { 'room_logs' : list(map(lambda log : marshal(log,roomlog_fields), logs))}
 
     def post(self):

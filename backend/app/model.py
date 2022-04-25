@@ -19,7 +19,7 @@ class Base(db.Model):
 
     @classmethod
     def get_all(cls):
-        return cls.query.all()
+        return cls.query.order_by(cls.id.desc()).all()
     
     @classmethod
     def get_by_id(cls, id):
