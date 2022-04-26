@@ -12,6 +12,30 @@ const Main = ({fetch_log}) => {
   const [total_log, setTotalLog] = useState(0)
   const [current_pp, setCurrent_pp] = useState(0)
   const [pp_per_hour, setPpPerHour] = useState([])
+  const [showReport, setShowReport] = useState(false)
+
+  const [report, setReport] = useState([])
+  const fetch_report_list = async() => {
+      const res = await fetch('http://127.0.0.1:8000/api/report/week')
+      const data = await res.json()
+      return data
+  }
+
+  const fetch_report_id = async(id) => {
+      const res = await fetch('http://127.0.0.1:8000/api/report/week/' + id)
+      const data = await res.json()
+      return data
+  }
+
+  const displayLastReport = async () => {
+    const list_report = await fetch_report_list()
+    const lst_len = list_report.reports.length
+    const last_report_id = list_report.reports[lst_len - 1].id
+    const last_report = await fetch_report_id(last_report_id)
+    setReport(last_report.weekday_report)
+    setShowReport(()=> !showReport)
+  }
+  
 
   useEffect(() => {
     const getLogs = async () => {
@@ -68,10 +92,9 @@ const Main = ({fetch_log}) => {
   return (
     <div className='main'>
         <div className='data'>
-          <Top current_pp={current_pp}/>
+          <Top current_pp={current_pp} displayLastReport={displayLastReport} showReport={showReport}/>
           <div className='chart_box'>
-            {/* <MyChart pp_per_hour={pp_per_hour}/> */}
-            <Report/>
+            {showReport ? (<Report report={report}/>) :(<MyChart pp_per_hour={pp_per_hour}/>)}
           </div>
         </div>
         <div className='live_log'>

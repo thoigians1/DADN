@@ -2,7 +2,7 @@ import React from 'react'
 import Table from 'react-bootstrap/Table'
 import { useState } from 'react'
 
-const Report = () => {
+const Report = ({report}) => {
 
     const headtr = {
         borderBottom: "solid 2px black"
@@ -10,43 +10,30 @@ const Report = () => {
 
     const each_td = {
         lineHeight: 2,
+        textTransform: 'capitalize'
     }
 
-    const [report, setReport] = useState([])
-    const fetch_report_list = async() => {
-        const res = await fetch('http://127.0.0.1:8000/api/report/week')
-        const data = await res.json()
-        return data
-    }
-
-    const fetch_report_id = async(id) => {
-        const res = await fetch('http://127.0.0.1:8000/api/report/week/' + id)
-        const data = await res.json()
-        return data
+    const getDate = (a) => {
+        const datePattern = new RegExp("[0-9]+ [a-zA-Z]+ [0-9]{4}")
+        console.log(datePattern.exec(a))
+        return datePattern.exec(a)
     }
 
     const displayReport = (report) => report.
                             map( (day) => { 
                                 return (
-                                        <tr>
+                                        <tr key={day.date}>
                                             <td style={each_td}> {day.weekday} </td>
-                                            <td style={each_td}> {day.date} </td>
+                                            <td style={each_td}> {getDate(day.date)} </td>
                                             <td style={each_td}> {day.avg_nop} </td>
                                             <td style={each_td}> {day.alert} </td>
                                         </tr>
                                 );
                             });
-    const displayLastReport = async () => {
-        const list_report = await fetch_report_list()
-        const lst_len = list_report.reports.length
-        const last_report_id = list_report.reports[lst_len - 1].id
-        const last_report = await fetch_report_id(last_report_id)
-        // console.log(last_report.weekday_report)
-        return displayReport(last_report.weekday_report)
-    }
+    
   return (
     <div>
-        <Table bordered style={{width:1100, margin:'0 auto', textAlign: 'center', borderCollapse: "collapse"}} responsive >
+        <Table bordered style={{width: 800, margin:'0 auto', textAlign: 'center', borderCollapse: "collapse"}} responsive >
             <thead>
                 <tr style={headtr}>
                     <th >Day</th>
@@ -56,7 +43,7 @@ const Report = () => {
                 </tr>
             </thead>
             <tbody>
-                {()=>displayLastReport()}
+                {displayReport(report)}
             </tbody>
         </Table>
     </div>

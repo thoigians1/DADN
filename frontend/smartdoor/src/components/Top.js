@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 
-const Top = ({current_pp}) => {
+const Top = ({current_pp, displayLastReport, showReport}) => {
   const [buzzer_style, setBuzzerStyle] = useState('button-19')
 
   const fetchBuzzerStatus = async() => {
@@ -50,7 +50,9 @@ const Top = ({current_pp}) => {
       <div className='buzzer-box'>
         <div className='buzzer'>
           <button className={buzzer_style} onClick={() => buzzerOff()}>Buzzer</button>
-          {/* <button className='reportbtn' onClick={() => showHidereport()}>Buzzer</button> */}
+          <button style={{marginTop: "10px"}}className='button-19' onClick={() => displayLastReport()}>
+            {showReport ? ('Chart') : ('Report')}
+          </button>
         </div>
       </div>
     </div>
