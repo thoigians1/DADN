@@ -50,6 +50,7 @@ const Top = ({current_pp}) => {
       <div className='buzzer-box'>
         <div className='buzzer'>
           <button className={buzzer_style} onClick={() => buzzerOff()}>Buzzer</button>
+          {/* <button className='reportbtn' onClick={() => showHidereport()}>Buzzer</button> */}
         </div>
       </div>
     </div>

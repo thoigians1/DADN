@@ -39,6 +39,7 @@ class MyChart extends Component {
             <Chart
               options={this.state.options}
               series={[{data: this.props.pp_per_hour}]}
+              // series={[{data: [0,0,0,0,0,0,0,1,2,1,2,3,3,3,4,5,3,3,5,0,0,0,0]}]}
               type="bar"
               height="400"
               width="800"

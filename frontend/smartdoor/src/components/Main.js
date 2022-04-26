@@ -3,6 +3,7 @@ import Top from './Top.js'
 import MyChart from './MyChart.js'
 import Log from './Log'
 import { useState, useEffect } from 'react'
+import Report from './Report.js'
 
 
 const Main = ({fetch_log}) => {
@@ -69,7 +70,8 @@ const Main = ({fetch_log}) => {
         <div className='data'>
           <Top current_pp={current_pp}/>
           <div className='chart_box'>
-            <MyChart pp_per_hour={pp_per_hour}/>
+            {/* <MyChart pp_per_hour={pp_per_hour}/> */}
+            <Report/>
           </div>
         </div>
         <div className='live_log'>
