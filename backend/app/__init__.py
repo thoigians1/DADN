@@ -32,7 +32,7 @@ login_manager = LoginManager(app)
 # Define Flask_Migrate
 migrate = Migrate(app, db, render_as_batch=True)
 
-HEADER = {"X-AIO-Key" : "aio_vjmJ72zHWLp9i8MT4XNCDJ5q08cp"}
+HEADER = {"X-AIO-Key" : "aio_hzWh98zRgvwNZVtNjn3RWlMOYr3w"}
 
 CORS(app)
 

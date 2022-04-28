@@ -37,7 +37,8 @@ def createDailyReport():
 
 def generateDailyReport(rp):
     sum = reduce(lambda s, rlog : s + rlog.nop, rp.room_log, 0)
-    rp.avg_nop = (sum*100//len(rp.room_log))/100
+    l = len(rp.room_log)
+    rp.avg_nop = round(sum/len(rp.room_log),2) if l else 0
     rp.n_alert = len(rp.buzzer_log)
 
     db.session.commit()

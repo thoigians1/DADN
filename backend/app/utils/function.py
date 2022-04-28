@@ -11,10 +11,5 @@ def abort_if_exist(model, id):
 
 def date2int(date):
     return int( str(date).replace("-","") + str(date.weekday()))
-
-def generateDailyReport(rp):
-    sum = reduce(lambda s, rlog : s + rlog.nop, rp.room_log, 0)
-    rp.avg_nop = (sum*100//len(rp.room_log))/100
-    rp.n_alert = len(rp.buzzer_log)
     
 

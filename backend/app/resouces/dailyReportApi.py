@@ -1,3 +1,4 @@
+from dataclasses import field
 from flask_restful import Resource, fields, marshal
 from datetime import datetime
 from ..model import DailyReport, DailyReportContent
@@ -15,6 +16,7 @@ content_fields = {
 }
 
 alert_log_fields = {'time' : fields.DateTime}
+room_log_fields = {'time' : fields.DateTime, 'nop' : fields.Integer}
 class AllDailyReportAPI(Resource):
     def get(self):
         rps = DailyReport.get_all()
@@ -29,13 +31,7 @@ class DailyReportAPI(Resource):
     def get(self, id):
         abort_if_not_exist(DailyReport,id)
         rp = DailyReport.get_by_id(id)
-        content = rp.content
-        DailyReportController.generateDailyReport(content)
-        alert_logs = list(map( lambda l : marshal(l,alert_log_fields), content.buzzer_log))
-        ret = marshal(rp, report_fields)
-        ret.update(marshal(content,content_fields))
-        ret.update({"alert_log" : alert_logs})
-        return ret
+        return parseDailyReport(rp)
 
     def delete(self,id):
         abort_if_not_exist(DailyReport, id)
@@ -43,22 +39,11 @@ class DailyReportAPI(Resource):
         DailyReportContent.delete(id)
         return {}
 
-# class CurrentDateReport(Resource):
-#     def get(self):
-#         rp = getCurrentDailyReport()
-#         return marshal(rp, report_fields)
+class CurrentDateReport(Resource):
+    def get(self):
+        rp = getCurrentDailyReport()
+        return parseDailyReport(rp)
 
-
-# class GenerateDailyReportAPI(Resource):
-#     def get(self, id):
-#         abort_if_not_exist(DailyReport,id)
-#         rp = DailyReport.get_by_id(id)
-#         generateDailyReport(rp)
-#         alert_logs = list(map( lambda l : marshal(l,alert_log_fields), rp.buzzer_log))
-#         db.session.commit()
-#         ret = marshal(rp, report_fields)
-#         ret.update({"alert_log" : alert_logs})
-#         return ret
 
 
 def getCurrentDailyReport():
@@ -71,6 +56,17 @@ def getCurrentDailyReport():
         return AllDailyReportAPI().post()
     
     return rp
+
+def parseDailyReport(rp):
+    content = rp.content
+    DailyReportController.generateDailyReport(content)
+    alert_logs = list(map( lambda l : marshal(l,alert_log_fields), content.buzzer_log))
+    room_logs = list( map( lambda l : marshal(l, room_log_fields), content.room_log))
+    ret = marshal(rp, report_fields)
+    ret.update(marshal(content,content_fields))
+    ret.update({'room_logs' : room_logs})
+    ret.update({"alert_log" : alert_logs})
+    return ret
     
             
 

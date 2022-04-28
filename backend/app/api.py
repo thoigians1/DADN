@@ -32,3 +32,4 @@ rest_api.add_resource(WeeklyReportAPI, '/report/week/<int:id>')
 
 rest_api.add_resource(AllDailyReportAPI, '/report/day')
 rest_api.add_resource(DailyReportAPI, '/report/day/<int:id>')
+rest_api.add_resource(CurrentDateReport, '/report/day/current')

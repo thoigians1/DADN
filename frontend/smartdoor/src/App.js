@@ -10,7 +10,7 @@ function App() {
   const [full, setFull] = useState(false);
 
   const fetch_log = async() => {
-    const res = await fetch('http://127.0.0.1:8000/api/room/log')
+    const res = await fetch('http://127.0.0.1:8000/api/report/day/current')
     const data = await res.json()
     return data
   }

@@ -13,7 +13,7 @@ const Top = ({current_pp, displayLastReport, showReport}) => {
   useEffect(() => {
     const getBuzzerStyle = async() => {
       const data = await fetchBuzzerStatus()
-      const status = data.status
+      const status = !data.status
       if (status) 
         setBuzzerStyle('button-off')
       else 

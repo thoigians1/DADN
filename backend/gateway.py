@@ -9,7 +9,7 @@ import requests
 # Define AIO variable
 AIO_FEED_ID = ["people", "buzzer"]
 AIO_USERNAME = "duongthanhthuong"
-AIO_KEY = "aio_vjmJ72zHWLp9i8MT4XNCDJ5q08cp"
+AIO_KEY = "aio_hzWh98zRgvwNZVtNjn3RWlMOYr3w"
 
 BASE = "http://127.0.0.1:8000/api"
 

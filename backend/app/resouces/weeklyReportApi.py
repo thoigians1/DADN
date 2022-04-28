@@ -3,9 +3,9 @@ from flask import request
 from flask_restful import Resource, reqparse, fields, marshal, abort
 from datetime import datetime
 from app import db
-from app.controller import WeeklyReportController
+from app.controller import WeeklyReportController, DailyReportController
 from ..model import WeeklyReport
-from ..utils.function import abort_if_not_exist, generateDailyReport
+from ..utils.function import abort_if_not_exist
 
 report_fields = {
     'id' : fields.Integer,
@@ -42,8 +42,9 @@ class WeeklyReportAPI(Resource):
         n = 0
         alert = 0
         for drp in rp.day_reports:
+            print(drp)
             drp_content = drp.content
-            generateDailyReport(drp_content)
+            DailyReportController.generateDailyReport(drp_content)
             id = drp.id
             m = len(drp_content.room_log)
             n += m
@@ -55,7 +56,7 @@ class WeeklyReportAPI(Resource):
                 "avg_nop" : drp_content.avg_nop,
                 "alert" : drp_content.n_alert
             },daily_rp_fields))
-        w_avg = round(sum/n,2)
+        w_avg = round(sum/n,2) if n else 0
         content.avg_nop = w_avg
         content.n_alert = alert
         db.session.commit()
